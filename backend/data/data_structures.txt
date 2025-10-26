@@ -1,0 +1,40 @@
+Data Structures and Algorithms
+
+Data structures are ways of organizing and storing data efficiently.
+
+Common Data Structures:
+
+1. Arrays:
+   - Fixed-size collection of elements
+   - Fast access by index
+   - Time complexity: O(1) for access
+
+2. Linked Lists:
+   - Dynamic size
+   - Easy insertion/deletion
+   - Time complexity: O(n) for search
+
+3. Stacks:
+   - LIFO (Last In First Out)
+   - Operations: push, pop, peek
+   - Applications: Function calls, undo operations
+
+4. Queues:
+   - FIFO (First In First Out)
+   - Operations: enqueue, dequeue
+   - Applications: Task scheduling, BFS
+
+5. Trees:
+   - Hierarchical structure
+   - Binary trees, BST, AVL trees
+   - Applications: File systems, databases
+
+6. Graphs:
+   - Nodes and edges
+   - Directed/undirected
+   - Applications: Social networks, maps
+
+Algorithm Complexity:
+- Time complexity: How runtime scales
+- Space complexity: How memory usage scales
+- Big O notation: O(1), O(log n), O(n), O(n²)

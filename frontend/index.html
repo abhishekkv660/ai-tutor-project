@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tutor Mascot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        /* Mascot Container */
+        .mascot-container {
+            position: relative;
+            margin: 30px auto;
+        }
+
+        /* Mascot Face */
+        .mascot {
+            width: 250px;
+            height: 250px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: #FFD700;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        /* Emotion-based colors */
+        .mascot.happy { background: #FFD700; }
+        .mascot.thinking { background: #87CEEB; }
+        .mascot.explaining { background: #98D8C8; }
+        .mascot.confused { background: #FFA07A; }
+        .mascot.neutral { background: #E0E0E0; }
+
+        /* Eyes */
+        .eyes {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .eye {
+            width: 30px;
+            height: 30px;
+            background: #333;
+            border-radius: 50%;
+            position: relative;
+            animation: blink 4s infinite;
+        }
+
+        .eye::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            top: 5px;
+            left: 5px;
+        }
+
+        /* Mouth Container */
+        .mouth-container {
+            position: relative;
+            width: 80px;
+            height: 50px;
+        }
+
+        /* Mouth (changes with emotion) */
+        .mouth {
+            width: 60px;
+            height: 30px;
+            border: 4px solid #333;
+            border-top: none;
+            border-radius: 0 0 60px 60px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: all 0.3s ease;
+        }
+
+        /* Mouth animations */
+        .mouth.happy {
+            border-radius: 0 0 60px 60px;
+        }
+
+        .mouth.thinking {
+            width: 50px;
+            height: 5px;
+            border: 2px solid #333;
+            border-radius: 5px;
+        }
+
+        .mouth.confused {
+            width: 50px;
+            height: 20px;
+            border-radius: 50%;
+            transform: translateX(-50%) rotate(90deg);
+        }
+
+        /* Speaking animation */
+        .mascot.speaking .mouth {
+            animation: mouthMove 0.3s infinite;
+        }
+
+        @keyframes mouthMove {
+            0%, 100% { height: 30px; }
+            50% { height: 45px; }
+        }
+
+        /* Listening pulse */
+        .mascot.listening {
+            animation: pulse 1.5s infinite;
+            box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 30px rgba(102, 126, 234, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+            }
+        }
+
+        /* Eye blink */
+        @keyframes blink {
+            0%, 49%, 51%, 100% { height: 30px; }
+            50% { height: 3px; }
+        }
+
+        /* Emotion animations */
+        .mascot.happy { animation: bounce 1.5s infinite; }
+        .mascot.thinking { animation: tilt 2s infinite; }
+        .mascot.explaining { animation: float 2s infinite; }
+        .mascot.confused { animation: shake 0.5s infinite; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes tilt {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Status */
+        .status {
+            margin: 20px 0;
+            font-size: 1.2em;
+            color: #667eea;
+            font-weight: 600;
+            min-height: 30px;
+        }
+
+        /* Controls */
+        .controls {
+            margin: 30px 0;
+        }
+
+        .mic-button {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: none;
+            background: #667eea;
+            color: white;
+            font-size: 2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .mic-button:hover {
+            background: #5568d3;
+            transform: scale(1.1);
+        }
+
+        .mic-button:active {
+            transform: scale(0.95);
+        }
+
+        .mic-button.listening {
+            background: #ff4757;
+            animation: pulse-button 1s infinite;
+        }
+
+        @keyframes pulse-button {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Chat Display */
+        .chat-container {
+            margin: 30px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: left;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .message {
+            margin: 15px 0;
+            padding: 12px 18px;
+            border-radius: 18px;
+            max-width: 85%;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .ai-message {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 50px;
+            text-align: center;
+        }
+
+        .loading span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            margin: 0 2px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: loading 1.4s infinite ease-in-out both;
+        }
+
+        .loading span:nth-child(1) { animation-delay: -0.32s; }
+        .loading span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes loading {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Connection Status */
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            font-size: 0.9em;
+        }
+
+        .connection-status.connected {
+            color: #28a745;
+        }
+
+        .connection-status.disconnected {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="connection-status" id="connectionStatus">
+        <span id="statusDot">●</span> <span id="statusText">Checking...</span>
+    </div>
+
+    <div class="container">
+        <h1>🎓 AI Tutor</h1>
+        <p class="subtitle">Your Friendly Learning Companion</p>
+
+        <!-- Mascot -->
+        <div class="mascot-container">
+            <div class="mascot neutral" id="mascot">
+                <div class="eyes">
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                </div>
+                <div class="mouth-container">
+                    <div class="mouth" id="mouth"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div class="status" id="status">Ready to help! Click the mic to speak.</div>
+
+        <!-- Mic Button -->
+        <div class="controls">
+            <button class="mic-button" id="micButton" onclick="toggleListening()">
+                🎤
+            </button>
+        </div>
+
+        <!-- Chat Display -->
+        <div class="chat-container" id="chatContainer"></div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:8000' 
+        : '/api';
+        const SESSION_ID = 'user_' + Date.now();
+
+        // State
+        let isListening = false;
+        let isSpeaking = false;
+        let recognition = null;
+        let currentEmotion = 'neutral';
+
+        // Elements
+        const mascot = document.getElementById('mascot');
+        const mouth = document.getElementById('mouth');
+        const status = document.getElementById('status');
+        const micButton = document.getElementById('micButton');
+        const chatContainer = document.getElementById('chatContainer');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const statusText = document.getElementById('statusText');
+        const statusDot = document.getElementById('statusDot');
+
+        // Initialize Speech Recognition
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = () => {
+                console.log('Speech recognition started');
+                updateStatus('🎤 Listening... Speak now!');
+                setMascotState('listening', 'neutral');
+            };
+
+            recognition.onresult = async (event) => {
+                const transcript = event.results[0][0].transcript;
+                console.log('Heard:', transcript);
+                stopListening();
+                await processQuery(transcript);
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                updateStatus('❌ Error: ' + event.error);
+                stopListening();
+            };
+
+            recognition.onend = () => {
+                console.log('Speech recognition ended');
+                if (isListening) {
+                    stopListening();
+                }
+            };
+        } else {
+            alert('Speech recognition not supported in this browser. Please use Chrome or Edge.');
+        }
+
+        // Check backend connection
+        async function checkConnection() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`);
+                if (response.ok) {
+                    connectionStatus.className = 'connection-status connected';
+                    statusText.textContent = 'Connected';
+                    return true;
+                }
+            } catch (error) {
+                connectionStatus.className = 'connection-status disconnected';
+                statusText.textContent = 'Backend Offline';
+                return false;
+            }
+        }
+
+        // Toggle listening
+        function toggleListening() {
+            if (isListening) {
+                stopListening();
+            } else {
+                startListening();
+            }
+        }
+
+        function startListening() {
+            if (!recognition) {
+                alert('Speech recognition not available');
+                return;
+            }
+            isListening = true;
+            micButton.classList.add('listening');
+            micButton.textContent = '⏸️';
+            recognition.start();
+        }
+
+        function stopListening() {
+            isListening = false;
+            micButton.classList.remove('listening');
+            micButton.textContent = '🎤';
+            if (recognition) {
+                recognition.stop();
+            }
+            setMascotState('idle', currentEmotion);
+        }
+
+        // Process user query
+        async function processQuery(userText) {
+            updateStatus('🤔 Thinking...');
+            addMessage(userText, 'user');
+            setMascotState('idle', 'thinking');
+
+            try {
+                // Call backend API
+                const response = await fetch(`${API_BASE_URL}/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        question: userText,
+                        session_id: SESSION_ID
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+
+                const data = await response.json();
+                console.log('API Response:', data);
+
+                // Update emotion
+                currentEmotion = data.emotion || 'neutral';
+                setMascotState('idle', currentEmotion);
+
+                // Display response
+                addMessage(data.text, 'ai');
+
+                // Speak the response
+                await speakText(data.text);
+
+                updateStatus('Ready! Click mic to ask another question.');
+                setMascotState('idle', currentEmotion);
+
+            } catch (error) {
+                console.error('Error:', error);
+                updateStatus('❌ Error connecting to backend');
+                addMessage('Sorry, I couldn\'t process that. Please make sure the backend is running.', 'ai');
+                setMascotState('idle', 'confused');
+            }
+        }
+
+        // Text-to-Speech
+        async function speakText(text) {
+            updateStatus('🔊 Speaking...');
+            setMascotState('speaking', currentEmotion);
+
+            // Use Web Speech API for TTS
+            if ('speechSynthesis' in window) {
+                return new Promise((resolve) => {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.rate = 0.9;
+                    utterance.pitch = 1;
+                    utterance.volume = 1;
+
+                    utterance.onend = () => {
+                        setMascotState('idle', currentEmotion);
+                        resolve();
+                    };
+
+                    window.speechSynthesis.speak(utterance);
+                });
+            }
+        }
+
+        // Set mascot state
+        function setMascotState(state, emotion) {
+            mascot.className = `mascot ${emotion}`;
+            mouth.className = `mouth ${emotion}`;
+
+            if (state === 'speaking') {
+                mascot.classList.add('speaking');
+            } else if (state === 'listening') {
+                mascot.classList.add('listening');
+            }
+        }
+
+        // Update status text
+        function updateStatus(text) {
+            status.textContent = text;
+        }
+
+        // Add message to chat
+        function addMessage(text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}-message`;
+            messageDiv.textContent = text;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Initialize
+        window.onload = () => {
+            checkConnection();
+            updateStatus('Ready! Click the mic button to speak.');
+            
+            // Periodic connection check
+            setInterval(checkConnection, 5000);
+        };
+    </script>
+</body>
+</html>

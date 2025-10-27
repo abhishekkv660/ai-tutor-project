@@ -86,12 +86,24 @@ Backend will run at: `http://localhost:8000`
 
 ### 3. Frontend Setup
 
-Simply open `frontend/index.html` in your browser, or use Docker:
+Open a NEW terminal window:
 
-cd frontend
+Windows:
+  cd frontend
+  python -m http.server 8080
 
-Open index.html in Chrome/Edge
-text
+macOS/Linux:
+  cd frontend
+  python3 -m http.server 8080
+
+✅ Frontend should start at: http://localhost:8080
+
+Open in Browser
+------------------------
+1. Open Google Chrome or Microsoft Edge
+2. Navigate to: http://localhost:8080
+3. Allow microphone access when prompted
+4. You should see the AI Tutor mascot!
 
 ## 🐳 Docker Deployment
 
